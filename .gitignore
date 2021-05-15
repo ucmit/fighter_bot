@@ -1,0 +1,9 @@
+# Исключения
+__pycache__
+conf.py
+.vscode
+FFmpeg
+img/*
+
+# Исключения исключений
+!img/vs_animated
