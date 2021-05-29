@@ -7,3 +7,4 @@ img/*
 
 # Исключения исключений
 !img/vs_animated
+!img/vs_bg.png

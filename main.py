@@ -3,11 +3,16 @@ try:
     import conf
 except ImportError:
     pass
+
 # Импортируем библиотеки
 import discord
 from discord.ext import commands
-import img_handler as imhl
 import os, random
+
+import img_handler as imhl
+import fight as f
+
+
 
 """
     Настройка бота
@@ -72,9 +77,9 @@ async def vs_ost(ctx):
 @allowed_channel()
 async def fight(ctx:commands.Context):
     # Первый претендент
-    f1 = None
+    f1:discord.Member = None
     # Второй претендент
-    f2 = bot.user
+    f2:discord.Member = bot.user
     # Voice-канал участника
     voice_channel = ctx.author.voice.channel
     if voice_channel:
@@ -91,11 +96,24 @@ async def fight(ctx:commands.Context):
             f1 = ctx.author
         # СОЗДАТЬ VS_SCREEN
         await imhl.vs_create_animated(f1.avatar_url, f2.avatar_url)
-        await ctx.channel.send(file=discord.File(os.path.join("./img/result.gif")))
+
+        embed = discord.Embed(
+            title = "Let's Mortal Kombat Begins!",
+            description = f'{f1.display_name} бьётся с {f2.display_name}',
+            colour = discord.Colour.dark_purple(),
+        )
+
+        message = await ctx.channel.send(embed = embed, file=discord.File(os.path.join("./img/result.gif")))
         # ЗАПУСТИТЬ МУЗЫКУ
         voice_client = discord.utils.get(bot.voice_clients, guild = ctx.guild)
-        await ctx.channel.send(f'MORTAL COMBAAT')
-        await voice_client.play(discord.FFmpegPCMAudio(source="./mp3/mk.mp3"))
+        # await voice_client.play(discord.FFmpegPCMAudio(source="./mp3/mk.mp3"))
+
+        await f.create_fighters(f1, f2, message)
+
+
+        await voice_client.stop()
+
+        
     else: 
         await ctx.channel.send("Зайдите в voice-канал пожажя")
 """
